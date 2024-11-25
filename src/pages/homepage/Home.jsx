@@ -1,12 +1,10 @@
-import { Button } from "@/components/ui/button";
+import Navbar from "@/components/shared/Navbar";
+
 
 const Home = () => {
   return (
-    <div className="text-3xl text-center p-10 text-green-500">
-      This is Home
-      <div>
-        
-      </div>
+    <div className="">
+      <Navbar />
     </div>
   );
 };
