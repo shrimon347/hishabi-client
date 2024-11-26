@@ -15,7 +15,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         {/* Logo Section */}
         <div className="text-2xl font-semibold">
-          <Link to="/" className="text-black">
+          <Link to="/" className="text-white text-xl md:text-4xl ">
             Hishabi
           </Link>
         </div>
@@ -66,7 +66,7 @@ const Navbar = () => {
 
         {/* Mobile Menu (Hamburger) */}
         <div className="md:hidden">
-          <button className="text-black" onClick={toggleMenu}>
+          <button className="text-white" onClick={toggleMenu}>
             {menuOpen ? <FiX size={24} /> : <FiMenu size={24} />}{" "}
             {/* Using icons from React Icons */}
           </button>
