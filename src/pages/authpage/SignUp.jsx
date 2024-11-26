@@ -1,3 +1,4 @@
+import { useRegisterMutation } from "@/app/api/apiSlice";
 import Navbar from "@/components/shared/Navbar";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,11 +10,13 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { AiOutlineGithub, AiOutlineGoogle } from "react-icons/ai";
 import { FaFacebook } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -22,28 +25,53 @@ const SignUp = () => {
     email: "",
     password: "",
   });
-
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [register, { isLoading }] = useRegisterMutation();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Form Submitted:", formData);
-    // Add form validation or API integration logic here
+
+    try {
+      const response = await register(formData).unwrap();
+      if (response.success) {
+        toast.success("Registration successful!");
+        navigate("/login"); 
+      }
+    } catch (err) {
+      
+      if (err?.data?.errors) {
+        Object.values(err.data.errors).forEach((error) => {
+          toast.error(error); 
+        });
+      } else {
+       
+        toast.error(
+          err?.data?.message || "Registration failed. Please try again."
+        );
+      }
+    }
+  };
+
+  const renderButtonContent = () => {
+    if (isLoading) return "Registering...";
+    return "Register";
   };
 
   return (
-    <div className="">
-      <div className="absolute top-0 z-[-2]  lg:h-screen md:h-[740px] h-[668px] w-full bg-[#000000] bg-[radial-gradient(#ffffff33_1px,#00091d_1px)] bg-[size:20px_20px]">
+    <div>
+      <div className="absolute top-0 z-[-2] h-screen w-full bg-[#000000] bg-[radial-gradient(#ffffff33_1px,#00091d_1px)] bg-[size:20px_20px]">
         <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[510px] w-full rounded-full bg-green-700 opacity-40 blur-[100px]"></div>
       </div>
       <Navbar />
-      <div className="max-w-7xl mx-auto flex py-10 mt-12 justify-center ">
-        <Card className="w-full max-w-md shadow-md">
+      <div className="max-w-7xl mx-auto flex px-5 py-10 mt-12 z-[50] justify-center">
+        <Card className="w-full max-w-md shadow-md ">
           <CardHeader>
             <CardTitle className="text-center text-2xl font-semibold">
               Register
@@ -121,10 +149,13 @@ const SignUp = () => {
               {/* Submit Button */}
               <Button
                 type="submit"
+                disabled={isLoading}
                 className="w-full bg-green-600 text-white hover:bg-[#4DBE18]"
               >
-                Register
+                {renderButtonContent()}
               </Button>
+
+             
             </form>
           </CardContent>
 

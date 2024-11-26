@@ -1,3 +1,4 @@
+import { useLoginMutation } from "@/app/api/apiSlice";
 import Navbar from "@/components/shared/Navbar";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,17 +10,23 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { setUser } from "@/features/auth/authSlice";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { AiOutlineGithub, AiOutlineGoogle } from "react-icons/ai";
 import { FaFacebook } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [login, { isLoading }] = useLoginMutation();
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -28,10 +35,27 @@ const Login = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Submitted:", formData);
-    // Add form validation or API integration logic here
+    // console.log("Form Submitted:", formData);
+    try {
+      const response = await login(formData).unwrap();
+
+      if (response.success) {
+        dispatch(setUser({ user: response.data.user, jwt: response.data.jwt }));
+
+        toast.success(response.message || "Login successful!");
+        navigate("/dashboard");
+      }
+    } catch (err) {
+      if (err?.data?.errors) {
+        Object.values(err.data.errors).forEach((error) => {
+          toast.error(error);
+        });
+      } else {
+        toast.error(err?.data?.message || "Invalid email or password");
+      }
+    }
   };
 
   return (
@@ -49,8 +73,6 @@ const Login = () => {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
-            
-
               {/* Email */}
               <div className="space-y-1">
                 <Label htmlFor="email">Email</Label>
@@ -95,7 +117,7 @@ const Login = () => {
                 type="submit"
                 className="w-full bg-green-600 text-white hover:bg-[#4DBE18]"
               >
-                Login
+                {isLoading ? "Logging in..." : "Login"}
               </Button>
             </form>
           </CardContent>
