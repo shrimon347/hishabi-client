@@ -11,7 +11,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="text-white sticky top-0 z-50">
+    <nav className="text-white sticky inset-0 top-0 z-50 backdrop-blur-sm shadow-md">
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         {/* Logo Section */}
         <div className="text-2xl font-semibold">
@@ -21,7 +21,7 @@ const Navbar = () => {
         </div>
 
         {/* Navbar Links (Desktop) */}
-        <ul className="hidden md:flex bg-black py-3 px-8 space-x-16 rounded-full">
+        <ul className="hidden lg:flex bg-black py-3 px-8 space-x-16 rounded-full">
           <li>
             <a href="#features" className="">
               Features
@@ -65,7 +65,7 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Menu (Hamburger) */}
-        <div className="md:hidden">
+        <div className="lg:hidden">
           <button className="text-white" onClick={toggleMenu}>
             {menuOpen ? <FiX size={24} /> : <FiMenu size={24} />}{" "}
             {/* Using icons from React Icons */}
