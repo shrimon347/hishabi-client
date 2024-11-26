@@ -11,8 +11,8 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="text-white sticky inset-0 top-0 z-50 backdrop-blur-sm shadow-md">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <nav className="text-white sticky inset-0 top-0 z-50  shadow-md">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center backdrop-blur-sm">
         {/* Logo Section */}
         <div className="text-2xl font-semibold">
           <Link to="/" className="text-white text-xl md:text-4xl ">
@@ -84,10 +84,10 @@ const Navbar = () => {
 
           {/* Sidebar Menu */}
           <div
-            className={`fixed inset-0 z-50 bg-gray-800 p-4 transition-transform transform md:hidden`}
+            className={`fixed inset-0 z-[200] bg-gray-800 p-4  transition-transform transform lg:hidden`}
             style={{
               transform: menuOpen ? "translateX(0)" : "translateX(-100%)",
-              transition: "transform 0.3s ease-in-out", // Ensure smooth transition
+              transition: "transform 0.3s ease-in-out",
             }}
           >
             {/* Close Button */}
