@@ -46,18 +46,22 @@ const Navbar = () => {
 
         {/* Authentication Buttons (Desktop) */}
         <div className=" md:flex space-x-4 ">
-          <Button
-            variant="outline"
-            className="rounded-full px-6 border-black text-black hover:bg-black hover:text-white"
-          >
-            Login
-          </Button>
-          <Button
-            variant="outline"
-            className="rounded-full px-6 border-black text-black hover:bg-black hover:text-white"
-          >
-            Sign Up
-          </Button>
+          <Link to="/login">
+            <Button
+              variant="outline"
+              className="rounded-full px-6 border-black text-black hover:bg-black hover:text-white"
+            >
+              Login
+            </Button>
+          </Link>
+          <Link to="/register">
+            <Button
+              variant="outline"
+              className="rounded-full px-6 border-black text-black hover:bg-black hover:text-white"
+            >
+              Sign Up
+            </Button>
+          </Link>
         </div>
 
         {/* Mobile Menu (Hamburger) */}
