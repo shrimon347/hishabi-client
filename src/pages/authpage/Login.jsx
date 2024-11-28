@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { setUser } from "@/features/auth/authSlice";
+import { setLoading, setUser } from "@/features/auth/authSlice";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { AiOutlineGithub, AiOutlineGoogle } from "react-icons/ai";
@@ -39,6 +39,7 @@ const Login = () => {
     e.preventDefault();
     // console.log("Form Submitted:", formData);
     try {
+      dispatch(setLoading(true));
       const response = await login(formData).unwrap();
 
       if (response.success) {
