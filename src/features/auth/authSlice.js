@@ -2,9 +2,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  user: JSON.parse(localStorage.getItem("user")) || null, // Load user from localStorage
-  jwt: localStorage.getItem("token") || null, // Load JWT from localStorage
-  isAuthenticated: !!localStorage.getItem("token"), // Determine if authenticated
+  user: JSON.parse(localStorage.getItem("user")) || null,
+  jwt: localStorage.getItem("token") || null,
+  isAuthenticated: !!localStorage.getItem("token"), 
   isLoading: false,
   error: null,
 };

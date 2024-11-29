@@ -1,13 +1,14 @@
+/* eslint-disable react/prop-types */
 import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
 
-const Error = () => {
+const Error = ({back}) => {
   return (
     <div className="max-w-7xl mx-auto mt-[20%] text-center">
       <p className="text-6xl text-center font-extrabold text-green-900 ">
         404 Not Found
       </p>
-      <Link to="/">
+      <Link to={back}>
         <Button
           variant="outline"
           className="mt-10 border-green-500 hover:bg-green-100"
