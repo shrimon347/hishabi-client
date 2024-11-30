@@ -2,9 +2,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  user: JSON.parse(localStorage.getItem("user")) || null,
-  jwt: localStorage.getItem("token") || null,
-  isLoading: false,
+  user: null,
+  jwt: null,
+  isAuthenticated: false,
   error: null,
 };
 
@@ -16,30 +16,22 @@ const authSlice = createSlice({
       const { user, jwt } = action.payload;
       state.user = user;
       state.jwt = jwt;
-      state.isLoading = false;
+      state.isAuthenticated = true;
 
       localStorage.setItem("token", jwt);
       localStorage.setItem("user", JSON.stringify(user));
     },
-    logOut: (state) => {
-      state.user = null;
-      state.jwt = null;
-      state.isAuthenticated = false;
-
+    logOut: (state, action) => {
+      (state.user = null), (state.jwt = null), (state.isAuthenticated = false);
       // Clear localStorage
       localStorage.removeItem("token");
       localStorage.removeItem("user");
     },
-    setLoading: (state, action) => {
-      state.isLoading = action.payload;
-    },
   },
 });
 
-export const { setUser, logOut, setLoading } = authSlice.actions;
+export const { setUser, logOut } = authSlice.actions;
 
 export default authSlice.reducer;
 
 export const selectCurrentUser = (state) => state.auth.user;
-export const selectCurrentToken = (state) => state.auth.jwt;
-export const selectIsLoading = (state) => state.auth.isLoading;
