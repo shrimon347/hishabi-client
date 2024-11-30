@@ -1,4 +1,7 @@
+import { logOut } from "@/features/auth/authSlice";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { Button } from "../ui/button";
 import {
   DropdownMenu,
@@ -9,9 +12,6 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { useNavigate } from "react-router-dom";
-import { logOut } from "@/features/auth/authSlice";
-import { toast } from "react-toastify";
 const DropDown = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -22,10 +22,8 @@ const DropDown = () => {
     // Dispatch the logout action
     dispatch(logOut());
 
-    // Show a success message
     toast.success("Successfully logged out!");
 
-    // Navigate to login or home page
     navigate("/login");
   };
   return (
