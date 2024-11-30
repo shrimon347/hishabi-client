@@ -28,30 +28,42 @@ const SignUp = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [register, { isLoading }] = useRegisterMutation();
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.firstName.trim()) newErrors.firstName = "First name is required.";
+    if (!formData.lastName.trim()) newErrors.lastName = "Last name is required.";
+    if (!formData.email.trim()) newErrors.email = "Email is required.";
+    if (!formData.password.trim() || formData.password.length < 6)
+      newErrors.password = "Password must be at least 6 characters long.";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Submitted:", formData);
+    if (!validateForm()) return;
 
     try {
       const response = await register(formData).unwrap();
       if (response.success) {
         toast.success("Registration successful!");
-        navigate("/login"); 
+        setFormData({ firstName: "", lastName: "", email: "", password: "" }); // Reset form
+        navigate("/login");
       }
     } catch (err) {
-      
       if (err?.data?.errors) {
         Object.values(err.data.errors).forEach((error) => {
-          toast.error(error); 
+          toast.error(error);
         });
       } else {
-       
         toast.error(
           err?.data?.message || "Registration failed. Please try again."
         );
@@ -71,7 +83,7 @@ const SignUp = () => {
       </div>
       <Navbar />
       <div className="max-w-7xl mx-auto flex px-5 py-10 mt-12 z-[50] justify-center">
-        <Card className="w-full max-w-md shadow-md ">
+        <Card className="w-full max-w-md shadow-md">
           <CardHeader>
             <CardTitle className="text-center text-2xl font-semibold">
               Register
@@ -87,10 +99,16 @@ const SignUp = () => {
                   name="firstName"
                   placeholder="Enter your first name"
                   value={formData.firstName}
-                  className="border-green-500"
+                  className={`border-green-500 ${
+                    errors.firstName ? "border-red-500" : ""
+                  }`}
                   onChange={handleChange}
                   required
+                  aria-label="First Name"
                 />
+                {errors.firstName && (
+                  <p className="text-red-500 text-sm">{errors.firstName}</p>
+                )}
               </div>
 
               {/* Last Name */}
@@ -101,10 +119,16 @@ const SignUp = () => {
                   name="lastName"
                   placeholder="Enter your last name"
                   value={formData.lastName}
-                  className="border-green-500"
+                  className={`border-green-500 ${
+                    errors.lastName ? "border-red-500" : ""
+                  }`}
                   onChange={handleChange}
                   required
+                  aria-label="Last Name"
                 />
+                {errors.lastName && (
+                  <p className="text-red-500 text-sm">{errors.lastName}</p>
+                )}
               </div>
 
               {/* Email */}
@@ -116,10 +140,16 @@ const SignUp = () => {
                   type="email"
                   placeholder="Enter your email"
                   value={formData.email}
-                  className="border-green-500"
+                  className={`border-green-500 ${
+                    errors.email ? "border-red-500" : ""
+                  }`}
                   onChange={handleChange}
                   required
+                  aria-label="Email"
                 />
+                {errors.email && (
+                  <p className="text-red-500 text-sm">{errors.email}</p>
+                )}
               </div>
 
               {/* Password */}
@@ -133,8 +163,11 @@ const SignUp = () => {
                     placeholder="Enter your password"
                     value={formData.password}
                     onChange={handleChange}
-                    className="border-green-500"
+                    className={`border-green-500 ${
+                      errors.password ? "border-red-500" : ""
+                    }`}
                     required
+                    aria-label="Password"
                   />
                   <button
                     type="button"
@@ -144,6 +177,9 @@ const SignUp = () => {
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
                 </div>
+                {errors.password && (
+                  <p className="text-red-500 text-sm">{errors.password}</p>
+                )}
               </div>
 
               {/* Submit Button */}
@@ -154,8 +190,6 @@ const SignUp = () => {
               >
                 {renderButtonContent()}
               </Button>
-
-             
             </form>
           </CardContent>
 
@@ -166,18 +200,21 @@ const SignUp = () => {
               <button
                 type="button"
                 className="flex items-center justify-center p-2 rounded-full border border-[#4DBE18] hover:bg-gray-100"
+                aria-label="Sign up with Google"
               >
                 <AiOutlineGoogle size={24} className="text-[#4DBE18]" />
               </button>
               <button
                 type="button"
                 className="flex items-center justify-center p-2 rounded-full border border-[#4DBE18] hover:bg-gray-100"
+                aria-label="Sign up with GitHub"
               >
                 <AiOutlineGithub size={24} className="text-[#4DBE18]" />
               </button>
               <button
                 type="button"
                 className="flex items-center justify-center p-2 rounded-full border border-[#4DBE18] hover:bg-gray-100"
+                aria-label="Sign up with Facebook"
               >
                 <FaFacebook size={24} className="text-[#4DBE18]" />
               </button>

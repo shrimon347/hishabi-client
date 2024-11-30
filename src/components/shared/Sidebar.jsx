@@ -1,10 +1,7 @@
 import {
   ChatAltIcon,
-  CodeIcon,
-  CogIcon,
   HomeIcon,
   MenuIcon,
-  MusicNoteIcon,
   PhotographIcon,
   VideoCameraIcon,
   XIcon,
@@ -13,7 +10,6 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 const Sidebarlayout = () => {
-  // State to track sidebar visibility on mobile
   const [isOpen, setIsOpen] = useState(false);
 
   // Get the current path to determine the active route
@@ -23,37 +19,22 @@ const Sidebarlayout = () => {
     {
       name: "Dashboard",
       icon: <HomeIcon className="h-6 w-6 text-sky-600" />,
-      path: "/",
+      path: "/dashboard",
     },
     {
-      name: "Conversation",
+      name: "Expenses",
       icon: <ChatAltIcon className="h-6 w-6 text-purple-600" />,
-      path: "/conversation",
+      path: "expenses",
     },
     {
-      name: "Image Generation",
+      name: "Transactions",
       icon: <PhotographIcon className="h-6 w-6 text-pink-600" />,
-      path: "/image",
+      path: "transactions",
     },
     {
-      name: "Content Generation",
+      name: "Profile",
       icon: <VideoCameraIcon className="h-6 w-6 text-orange-600" />,
-      path: "/content",
-    },
-    {
-      name: "Music Generation",
-      icon: <MusicNoteIcon className="h-6 w-6 text-green-600" />,
-      path: "/music-generation",
-    },
-    {
-      name: "Code Generation",
-      icon: <CodeIcon className="h-6 w-6 text-green-800" />,
-      path: "/code",
-    },
-    {
-      name: "Settings",
-      icon: <CogIcon className="h-6 w-6" />,
-      path: "/settings",
+      path: "profile",
     },
   ];
 

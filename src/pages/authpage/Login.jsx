@@ -19,53 +19,54 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
+// Reusable classes
+const iconClass =
+  "flex items-center justify-center p-2 rounded-full border border-[#4DBE18] hover:bg-gray-100";
+const successToast = (message) => toast.success(message || "Login successful!");
+const errorToast = (message) => toast.error(message);
+
 const Login = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [login, { isLoading }] = useLoginMutation();
-
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log("Form Submitted:", formData);
     try {
       dispatch(setLoading(true));
       const response = await login(formData).unwrap();
 
       if (response.success) {
         dispatch(setUser({ user: response.data.user, jwt: response.data.jwt }));
-
-        toast.success(response.message || "Login successful!");
+        successToast(response.message);
         navigate("/dashboard");
       }
     } catch (err) {
-      if (err?.data?.errors) {
-        Object.values(err.data.errors).forEach((error) => {
-          toast.error(error);
-        });
-      } else {
-        toast.error(err?.data?.message || "Invalid email or password");
-      }
+      const errors = err?.data?.errors || [err?.data?.message || "Login failed"];
+      errors.forEach((error) => errorToast(error));
+    } finally {
+      dispatch(setLoading(false));
     }
   };
 
   return (
-    <div className="">
-      <div className="absolute top-0 z-[-2]  lg:h-screen md:h-[740px] h-[668px] w-full bg-[#000000] bg-[radial-gradient(#ffffff33_1px,#00091d_1px)] bg-[size:20px_20px]">
+    <div>
+      {/* Background */}
+      <div className="absolute top-0 z-[-2] lg:h-screen md:h-[740px] h-[668px] w-full bg-[#000000] bg-[radial-gradient(#ffffff33_1px,#00091d_1px)] bg-[size:20px_20px]">
         <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[510px] w-full rounded-full bg-green-700 opacity-40 blur-[100px]"></div>
       </div>
+
       <Navbar />
-      <div className="max-w-7xl mx-auto flex py-10 mt-12 justify-center ">
+
+      {/* Login Card */}
+      <div className="max-w-7xl mx-auto flex py-10 mt-12 justify-center">
         <Card className="w-full max-w-md shadow-md">
           <CardHeader>
             <CardTitle className="text-center text-2xl font-semibold">
@@ -83,9 +84,9 @@ const Login = () => {
                   type="email"
                   placeholder="Enter your email"
                   value={formData.email}
-                  className="border-green-500"
                   onChange={handleChange}
                   required
+                  className="border-green-500"
                 />
               </div>
 
@@ -100,13 +101,14 @@ const Login = () => {
                     placeholder="Enter your password"
                     value={formData.password}
                     onChange={handleChange}
-                    className="border-green-500"
                     required
+                    className="border-green-500"
                   />
                   <button
                     type="button"
+                    aria-label="Toggle password visibility"
                     className="absolute right-2 top-2 text-gray-500 hover:text-gray-800"
-                    onClick={() => setShowPassword(!showPassword)}
+                    onClick={() => setShowPassword((prev) => !prev)}
                   >
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
@@ -117,6 +119,7 @@ const Login = () => {
               <Button
                 type="submit"
                 className="w-full bg-green-600 text-white hover:bg-[#4DBE18]"
+                disabled={isLoading}
               >
                 {isLoading ? "Logging in..." : "Login"}
               </Button>
@@ -127,28 +130,19 @@ const Login = () => {
           <CardFooter className="flex flex-col space-y-4">
             <div className="text-center text-gray-600">Or continue with</div>
             <div className="flex justify-center space-x-4">
-              <button
-                type="button"
-                className="flex items-center justify-center p-2 rounded-full border border-[#4DBE18] hover:bg-gray-100"
-              >
+              <button type="button" className={iconClass} aria-label="Login with Google">
                 <AiOutlineGoogle size={24} className="text-[#4DBE18]" />
               </button>
-              <button
-                type="button"
-                className="flex items-center justify-center p-2 rounded-full border border-[#4DBE18] hover:bg-gray-100"
-              >
+              <button type="button" className={iconClass} aria-label="Login with GitHub">
                 <AiOutlineGithub size={24} className="text-[#4DBE18]" />
               </button>
-              <button
-                type="button"
-                className="flex items-center justify-center p-2 rounded-full border border-[#4DBE18] hover:bg-gray-100"
-              >
+              <button type="button" className={iconClass} aria-label="Login with Facebook">
                 <FaFacebook size={24} className="text-[#4DBE18]" />
               </button>
             </div>
           </CardFooter>
 
-          {/* Already have an account? */}
+          {/* Redirect to Register */}
           <CardFooter className="justify-center">
             <p className="text-gray-600">
               Don&apos;t have an account?{" "}

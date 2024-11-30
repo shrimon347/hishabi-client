@@ -8,9 +8,8 @@ const PrivateRoute = ({ children }) => {
   const loading = useSelector(selectIsLoading);
   const user = useSelector(selectCurrentUser);
 
-  console.log(user);
+  // console.log(user);
 
-  // console.log(location);
   if (loading) {
     return (
       <div className="flex justify-center mt-[10%]">

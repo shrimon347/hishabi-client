@@ -1,8 +1,11 @@
+import Header from "@/components/shared/Header"
 
 
 const Dashboard = () => {
   return (
-    <div>Dashboard</div>
+    <div>
+      <Header />
+    </div>
   )
 }
 
