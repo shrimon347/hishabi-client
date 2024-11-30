@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { Button } from "../ui/button";
 
 const Error = () => {
   return (
@@ -8,12 +7,7 @@ const Error = () => {
         404 Not Found
       </p>
       <Link to="/">
-        <Button
-          variant="outline"
-          className="mt-10 border-green-500 hover:bg-green-100"
-        >
-          Back to home
-        </Button>
+        <button className="btn btn-primary mt-10">Back to home</button>
       </Link>
     </div>
   );
